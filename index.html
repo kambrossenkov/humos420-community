@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!-- HUMOS420 Community · página de entrada
+     Muestra la app de Apps Script a pantalla completa, con un nombre lindo en la barra del navegador.
+     La URL /exec ya está puesta. Solo si el proyecto de Vercel no se llama humos420community, cambiá las 2 líneas marcadas con ✏️.
+     v2 · 2026-10-23 · dentro de Instagram, Facebook o TikTok (su navegador interno no deja cargar la app de Google)
+                       muestra cómo abrirla en el navegador, con botón para Chrome en Android y para copiar el link. -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUMOS420 Community</title>
+<meta name="description" content="Seguí tu cultivo día por día: zonas, lotes, riego, poda y nutrientes.">
+<meta name="theme-color" content="#10110F">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="HUMOS420">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- Vista previa al compartir el link (WhatsApp, Instagram, etc.). Las direcciones tienen que ser completas.
+     ✏️ Si tu sitio se llama distinto, cambiá "humos420community.vercel.app" en las 2 líneas de abajo. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="HUMOS420 Community">
+<meta property="og:description" content="Tu cultivo, día por día. Creá tu cuenta y empezá a registrar.">
+<meta property="og:url" content="https://humos420community.vercel.app/">
+<meta property="og:image" content="https://humos420community.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  html, body { height: 100%; margin: 0; background: #10110F; }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .cargando { position: fixed; inset: 0; display: grid; place-items: center; color: #A4A69E;
+    font: 700 0.8rem/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.2em; }
+  /* Aviso para el navegador interno de Instagram / Facebook / TikTok */
+  .fuera { position: fixed; inset: 0; overflow: auto; padding: 40px 22px; background: #10110F; color: #F2F0E8;
+    font: 400 1rem/1.45 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; text-align: center; }
+  .fuera-caja { max-width: 380px; margin: 0 auto; }
+  .fuera .marca { font: 400 2.6rem/1 'Anton', Impact, 'Arial Narrow', sans-serif; letter-spacing: 0.01em; }
+  .fuera .lema { margin-top: 6px; color: #B7F34A; font: 700 0.72rem/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.2em; }
+  .fuera h1 { margin: 34px 0 10px; font-size: 1.25rem; }
+  .fuera p { margin: 0 0 14px; color: #A4A69E; }
+  .fuera ol { margin: 0 0 22px; padding: 16px 16px 16px 34px; border: 1px solid #41443B; border-radius: 12px; background: #1B1C19; text-align: left; }
+  .fuera li { margin: 6px 0; }
+  .fuera b { color: #F2F0E8; }
+  .fuera .btn { display: block; width: 100%; min-height: 52px; margin-bottom: 10px; padding: 14px; border: 0; border-radius: 12px;
+    background: #B7F34A; color: #10110F; font-family: inherit; font-size: 1.05rem; font-weight: 700; line-height: 1.6; text-decoration: none; cursor: pointer; }
+  .fuera .btn.sec { border: 1px solid #41443B; background: none; color: #F2F0E8; }
+  .fuera .chico { margin-top: 14px; font-size: 0.82rem; }
+</style>
+</head>
+<body>
+<div class="cargando" id="cargando">CARGANDO…</div>
+
+<!-- Se muestra solo dentro de Instagram, Facebook, Messenger, TikTok, etc. -->
+<div class="fuera" id="fuera" hidden>
+  <div class="fuera-caja">
+    <div class="marca">HUMOS420</div><div class="lema">COMMUNITY</div>
+    <h1>Abrilo en tu navegador</h1>
+    <p>El navegador de <span id="app-nombre">esta app</span> no deja iniciar sesión. Abrí el link en Chrome o Safari y entrás al toque.</p>
+    <a class="btn" id="btn-chrome" href="#" hidden>Abrir en Chrome</a>
+    <ol id="pasos-ios" hidden>
+      <li>Tocá <b>⋯</b> arriba a la derecha.</li>
+      <li>Elegí <b>Abrir en el navegador externo</b> (o "Abrir en Safari").</li>
+    </ol>
+    <ol id="pasos-android" hidden>
+      <li>Si el botón no abre nada, tocá <b>⋮</b> arriba a la derecha.</li>
+      <li>Elegí <b>Abrir en Chrome</b> (o "Abrir en el navegador").</li>
+    </ol>
+    <button type="button" class="btn sec" id="btn-copiar">Copiar el link</button>
+    <p class="chico" id="copiado" hidden>Link copiado: pegalo en Chrome o Safari.</p>
+    <p class="chico"><a href="#" id="btn-igual" style="color:#A4A69E">Probar igual acá</a></p>
+  </div>
+</div>
+
+<!-- La app (implementación /exec de Apps Script). Se carga acá salvo dentro de Instagram & cía. -->
+<iframe id="app" title="HUMOS420 Community" allow="clipboard-write" hidden></iframe>
+
+<script>
+(function () {
+  var APP_URL = 'https://script.google.com/macros/s/AKfycbw_i9kjJY-GN5q-OfMIi5k6hj5vFu36d_TxgJ70DaZk9csfLGU8mLFxkJD3TZDFWcn0/exec';
+  var ua = navigator.userAgent || '';
+  var internos = [['Instagram', /Instagram/i], ['Facebook', /FBAN|FBAV|FB_IAB|FBIOS/i], ['Messenger', /Messenger/i],
+                  ['TikTok', /musical_ly|BytedanceWebview|TikTok/i], ['Threads', /Barcelona/i], ['LinkedIn', /LinkedInApp/i], ['Snapchat', /Snapchat/i]];
+  var interno = null;
+  internos.forEach(function (x) { if (!interno && x[1].test(ua)) interno = x[0]; });
+  var forzar = /[?&]app=1\b/.test(location.search);   // "Probar igual acá" o pruebas: ?app=1
+
+  function cargarApp() {
+    var f = document.getElementById('app');
+    f.src = APP_URL; f.hidden = false;
+    document.getElementById('fuera').hidden = true;
+  }
+  if (!interno || forzar) { cargarApp(); return; }
+
+  document.getElementById('cargando').hidden = true;
+  document.getElementById('fuera').hidden = false;
+  document.getElementById('app-nombre').textContent = interno;
+  var link = location.origin + location.pathname;
+  var android = /Android/i.test(ua);
+  if (android) {
+    var chrome = document.getElementById('btn-chrome');
+    chrome.href = 'intent://' + location.host + location.pathname + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(link) + ';end';
+    chrome.hidden = false;
+    document.getElementById('pasos-android').hidden = false;
+  } else {
+    document.getElementById('pasos-ios').hidden = false;
+  }
+  document.getElementById('btn-copiar').addEventListener('click', function () {
+    function listo() { document.getElementById('copiado').hidden = false; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(listo, function () { window.prompt('Copiá el link:', link); });
+    else window.prompt('Copiá el link:', link);
+  });
+  // Abre la app directo (sin la página de adentro): a veces el navegador interno la deja cargar así.
+  document.getElementById('btn-igual').addEventListener('click', function (e) { e.preventDefault(); location.href = APP_URL; });
+})();
+</script>
+</body>
+</html>

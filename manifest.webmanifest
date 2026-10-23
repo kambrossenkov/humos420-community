@@ -1,0 +1,12 @@
+{
+  "name": "HUMOS420 Community",
+  "short_name": "HUMOS420",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#10110F",
+  "theme_color": "#10110F",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
