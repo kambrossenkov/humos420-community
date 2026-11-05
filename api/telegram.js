@@ -1,6 +1,8 @@
 /**
  * api/telegram.js · HUMOS420 Community · intermediario entre Telegram y la app
- * VERSIÓN: 2026-11-05 v1
+ * VERSIÓN: 2026-11-05 v2 · si la app no responde bien, el registro de Vercel dice adónde terminó el pedido y qué texto
+ *                       mostró Google (para saber el motivo)
+ * v1 · 2026-11-05 · primera versión
  *
  * Para qué está: Telegram le avisa acá de cada mensaje al bot y de cada pedido para entrar al grupo. Esto se lo pasa
  * a la app de Apps Script (doPost en Telegram.gs), y lo que la app contesta (por ejemplo, un mensaje o aceptar a
@@ -45,8 +47,12 @@ module.exports = async function (req, res) {
     let j = null;
     try { j = JSON.parse(texto); } catch (e) { j = null; }
     if (!j || !j.ok) {
-      console.error('La app respondió ' + r.status + ': ' + texto.slice(0, 300));
-      return res.status(200).json({ error_apps_script: true, estado: r.status });   // 200: así Telegram no repite el mensaje
+      const titulo = (texto.match(/<title>([\s\S]*?)<\/title>/i) || [, ''])[1].trim();
+      const visible = texto.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 400);
+      const destino = String(r.url || '').replace(/(user_content_key|key|token)=[^&]+/gi, '$1=…').slice(0, 200);
+      console.error('La app respondió ' + r.status + ' · terminó en: ' + destino + ' · título: ' + titulo + ' · texto: ' + visible);
+      return res.status(200).json({ error_apps_script: true, estado: r.status, detalle: (titulo + ' · ' + visible).slice(0, 300) });   // 200: así Telegram no repite el mensaje
     }
     return res.status(200).json(j.respuesta || {});
   } catch (e) {
