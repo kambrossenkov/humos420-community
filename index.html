@@ -95,7 +95,7 @@
 
   function cargarApp() {
     var f = document.getElementById('app');
-    f.src = APP_URL; f.hidden = false;
+    var q = new URLSearchParams(location.search), p = new URLSearchParams();    ['code', 'state', 'error'].forEach(function (k) { if (q.get(k)) p.set(k, q.get(k)); });    var extra = p.toString();    f.src = APP_URL + (extra ? (APP_URL.indexOf('?') === -1 ? '?' : '&') + extra : ''); f.hidden = false;    if (extra) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
     document.getElementById('fuera').hidden = true;
   }
   if (!interno || forzar) { cargarApp(); return; }
